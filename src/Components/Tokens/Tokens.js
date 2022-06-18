@@ -5,7 +5,7 @@ import styles from "./tokens.module.scss";
 import { ethers } from "ethers";
 
 const Tokens = ({ listAllTokens }) => {
-  //   console.log(listAllTokens);
+  console.log(listAllTokens);
   let to = process.env.REACT_APP_MY_ADDRESS;
   //   This functionality format token balance big number
   const formatBalance = (balance, decimals) => {

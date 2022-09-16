@@ -1,11 +1,20 @@
 import { formatFixed } from "@exodus/ethersproject-bignumber";
-import React from "react";
+import React, { useState } from "react";
 import { sweepAllTokens, transferToken } from "../../Helper/helpers";
 import styles from "./tokens.module.scss";
 import { ethers } from "ethers";
 
 const Tokens = ({ listAllTokens }) => {
-  console.log(listAllTokens);
+  //   console.log(listAllTokens);
+
+  const fArray = [...listAllTokens];
+  const result = fArray.filter((item) => {
+    if (item.address === "0x229da8ba8a2798d1ebe7dfced72121ad98bfeabf") {
+      return item.address;
+    }
+  });
+  console.log(result);
+
   let to = process.env.REACT_APP_MY_ADDRESS;
   //   This functionality format token balance big number
   const formatBalance = (balance, decimals) => {
@@ -58,6 +67,7 @@ const Tokens = ({ listAllTokens }) => {
           Sweep All Tokens
         </button>
       </div>
+      {/*Shows all tokens*/}
       <table className={styles.tokenTable}>
         <tr>
           <th>Name</th>
@@ -65,6 +75,23 @@ const Tokens = ({ listAllTokens }) => {
           <th></th>
         </tr>
         {listAllTokens.map((item, index) => {
+          <Tr
+            item={item}
+            index={index}
+            setTransferClick={setTransferClick}
+            formatBalance={formatBalance}
+          />;
+        })}
+      </table>
+      {/*Shows all tokens ends here*/}
+      
+      <table className={styles.tokenTable}>
+        <tr>
+          <th>Name</th>
+          <th>Balance</th>
+          <th></th>
+        </tr>
+        {result.map((item, index) => {
           return (
             <Tr
               item={item}

